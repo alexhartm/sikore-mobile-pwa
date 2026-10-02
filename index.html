@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#f5eddb" />
+    <meta
+      name="description"
+      content="Mobile Kopfrechenketten mit der originalen SIKORE-Rechenengine."
+    />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/app-icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <title>SIKORE Mobile</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="masthead">
+        <a
+          class="brand"
+          href="#info"
+          aria-label="Informationen über SIKORE Mobile"
+        >
+          <span class="brand-mark" aria-hidden="true">S/</span>
+          <span>SIKORE Mobile</span>
+        </a>
+        <div class="connection" aria-live="polite">
+          <span id="network-status" class="network-pill">online</span>
+          <span id="runtime-status" class="runtime-status" role="status"
+            >Wird geladen …</span
+          >
+        </div>
+      </header>
+
+      <div id="trainer-view" class="trainer-view">
+        <section class="exercise-card" aria-labelledby="exercise-prompt">
+          <div id="success-animation" class="success-burst" aria-hidden="true">
+            <span class="success-spark"></span>
+            <span class="success-spark"></span>
+            <span class="success-spark"></span>
+            <span class="success-spark"></span>
+            <span class="success-spark"></span>
+            <span class="success-spark"></span>
+            <span class="success-spark"></span>
+            <span class="success-spark"></span>
+            <span class="success-check">✓</span>
+          </div>
+          <div class="progress-row">
+            <span id="progress-level">Level –</span>
+            <progress
+              id="progress-bar"
+              max="12"
+              value="0"
+              aria-labelledby="progress-level progress-text"
+            >
+              0 von 12
+            </progress>
+            <span id="progress-text">1 von 12</span>
+          </div>
+
+          <p
+            id="exercise-prompt"
+            class="sr-only"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            Aufgabe wird geladen
+          </p>
+          <div id="problem-stage" class="problem-stage" data-layout="stacked">
+            <div class="calculation" aria-hidden="true">
+              <span id="current-value">–</span>
+              <span id="current-operation">–</span>
+              <span class="equals-sign">=</span>
+            </div>
+
+            <form id="answer-form" class="answer-form" novalidate>
+              <label for="answer">Dein Ergebnis</label>
+              <div class="answer-row">
+                <input
+                  id="answer"
+                  name="answer"
+                  type="text"
+                  inputmode="numeric"
+                  enterkeyhint="go"
+                  autocomplete="off"
+                  autocapitalize="off"
+                  maxlength="10"
+                  aria-describedby="feedback exercise-prompt"
+                  disabled
+                />
+              </div>
+            </form>
+          </div>
+          <button
+            id="submit-answer"
+            class="primary-button"
+            type="submit"
+            form="answer-form"
+            disabled
+          >
+            Prüfen
+          </button>
+          <p id="feedback" class="feedback" aria-live="polite"></p>
+          <button id="retry-engine" class="text-button" type="button" hidden>
+            Erneut versuchen
+          </button>
+        </section>
+
+        <section class="session-bar" aria-label="Aktuelle Runde">
+          <dl>
+            <div>
+              <dt>Fehler</dt>
+              <dd id="mistakes">0</dd>
+            </div>
+            <div>
+              <dt>Zeit</dt>
+              <dd id="elapsed">0 s</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="settings" aria-labelledby="settings-heading">
+          <h2 class="sr-only" id="settings-heading">
+            Schwierigkeit und neue Kette
+          </h2>
+          <div class="settings-row">
+            <button
+              id="level-select"
+              class="level-picker"
+              type="button"
+              aria-label="Schwierigkeitsstufe"
+              aria-haspopup="dialog"
+              aria-controls="level-dialog"
+              aria-expanded="false"
+              disabled
+            >
+              <span class="level-picker-copy">
+                <strong id="level-title"></strong>
+                <span id="level-description" class="level-description"></span>
+              </span>
+              <span aria-hidden="true">⌄</span>
+            </button>
+            <button
+              id="new-chain"
+              class="secondary-button"
+              type="button"
+              disabled
+            >
+              Neue Kette
+            </button>
+          </div>
+          <p id="level-hint" class="level-description" role="status" hidden>
+            Auswahl gilt für die nächste Kette.
+          </p>
+        </section>
+      </div>
+
+      <section
+        id="info-view"
+        class="info-view"
+        aria-labelledby="info-title"
+        hidden
+      >
+        <p class="section-label">Über diese App</p>
+        <h1 id="info-title">SIKORE Mobile</h1>
+        <p class="info-lead">
+          Eine mobile Oberfläche für die Kopfrechenketten von SIKORE.
+        </p>
+        <p>
+          Ein herzliches Dankeschön an <strong>Christian Schiffner</strong> für
+          SIKORE, die Rechenlogik und viele Jahre kostenloses
+          Kopfrechentraining.
+        </p>
+        <div class="info-links">
+          <a
+            class="primary-link"
+            href="https://sikore.schiffner-tischer.de/"
+            rel="external"
+          >
+            Originales SIKORE öffnen
+          </a>
+          <a
+            href="https://github.com/alexhartm/sikore-mobile-pwa"
+            rel="external"
+          >
+            SIKORE Mobile auf GitHub
+          </a>
+        </div>
+        <a class="secondary-button back-link" href="#">Zurück zum Rechnen</a>
+      </section>
+
+      <footer class="site-footer">
+        <p>
+          Aufgaben und Prüfung durch die
+          <a href="https://sikore.schiffner-tischer.de/" rel="external"
+            >originale SIKORE-Engine</a
+          >.
+        </p>
+      </footer>
+    </main>
+    <dialog
+      id="level-dialog"
+      class="level-dialog"
+      aria-labelledby="level-dialog-title"
+      aria-describedby="level-dialog-hint"
+    >
+      <div class="level-dialog-header">
+        <h2 id="level-dialog-title">Schwierigkeit wählen</h2>
+        <button
+          id="close-level-dialog"
+          class="text-button"
+          type="button"
+          aria-label="Auswahl schließen"
+        >
+          ✕
+        </button>
+      </div>
+      <p id="level-dialog-hint">
+        Wähle einen Level. Mit „Neue Kette“ geht’s los.
+      </p>
+      <div
+        id="level-options"
+        class="level-options"
+        role="group"
+        aria-label="Schwierigkeitsstufe"
+      ></div>
+    </dialog>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

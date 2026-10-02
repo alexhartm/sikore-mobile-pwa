@@ -1,0 +1,29 @@
+# Imported investigation material; retained locally as reference only.
+investigations_sikore-pwa-spike/
+
+# Dependencies and build output
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# Test output
+coverage/
+playwright-report/
+test-results/
+
+# Local configuration and certificates
+mise.local.toml
+backups/
+.env
+.env.*
+!.env.example
+certificates/
+*.pem
+*.key
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
+*.swp

@@ -1,0 +1,9 @@
+dist/
+node_modules/
+coverage/
+playwright-report/
+test-results/
+investigations_sikore-pwa-spike/
+backups/
+mise.local.toml
+package-lock.json

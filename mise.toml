@@ -1,0 +1,68 @@
+[tools]
+node = "22"
+pre-commit = "latest"
+
+[tasks.install]
+description = "Install locked JavaScript dependencies"
+run = "npm ci"
+
+[tasks.dev]
+description = "Start the development server on this machine and LAN"
+alias = ["start"]
+run = "npm run dev -- --host 0.0.0.0"
+
+[tasks.serve]
+description = "Build and serve the production PWA on this machine and LAN"
+alias = ["preview", "pwa"]
+run = "npm run build && npm run preview -- --host 0.0.0.0"
+
+[tasks.build]
+description = "Build the deployable static site in dist"
+alias = ["b"]
+run = "npm run build"
+
+[tasks.test]
+description = "Run unit and integration tests once"
+alias = ["t"]
+run = "npm test"
+
+[tasks.test-watch]
+description = "Run unit tests in watch mode"
+run = "npm run test:watch"
+
+[tasks.test-e2e]
+description = "Run deterministic browser tests"
+run = "npm run test:e2e"
+
+[tasks.test-live]
+description = "Run the opt-in contract test against the live SIKORE engine"
+run = "npm run test:live"
+
+[tasks.lint]
+description = "Lint TypeScript and configuration files"
+alias = ["l"]
+run = "npm run lint"
+
+[tasks.format]
+description = "Format supported project files"
+alias = ["fmt"]
+run = "npm run format"
+
+[tasks.typecheck]
+description = "Check TypeScript types"
+alias = ["types"]
+run = "npm run typecheck"
+
+[tasks.check]
+description = "Run formatting, linting, types, unit tests, and production build"
+alias = ["c"]
+run = "npm run check"
+
+[tasks.pre-commit]
+description = "Run all pre-commit hooks against the repository"
+alias = ["pc", "hooks"]
+run = "pre-commit run --all-files"
+
+[tasks.setup-hooks]
+description = "Install pre-commit and pre-push Git hooks"
+run = "pre-commit install --install-hooks && pre-commit install --hook-type pre-push"
