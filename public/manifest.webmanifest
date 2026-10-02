@@ -1,0 +1,31 @@
+{
+  "id": "./",
+  "name": "SIKORE Mobile – Kopfrechnen",
+  "short_name": "SIKORE Mobile",
+  "description": "Mobile Kopfrechenketten mit der originalen SIKORE-Rechenengine.",
+  "lang": "de",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5eddb",
+  "theme_color": "#f5eddb",
+  "icons": [
+    {
+      "src": "./icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
