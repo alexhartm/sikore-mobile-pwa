@@ -878,6 +878,25 @@ progress::-moz-progress-bar {
   display: none;
 }
 
+/* Reuse the finished controls' space without changing the card's dimensions. */
+.exercise-card:has(.feedback[data-kind="complete"]) {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.exercise-card:has(.feedback[data-kind="complete"]) .answer-form,
+.exercise-card:has(.feedback[data-kind="complete"]) .primary-button {
+  display: none;
+}
+
+.exercise-card:has(.feedback[data-kind="complete"]) .problem-stage {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.feedback[data-kind="complete"] {
+  height: auto;
+  overflow: visible;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .exercise-card {
     animation: page-in 240ms ease-out;
