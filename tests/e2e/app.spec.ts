@@ -42,6 +42,102 @@ test("changes and persists the selected level", async ({ page }) => {
   await expect(page.locator("#level-title")).toHaveText("Level 5");
 });
 
+test("replays wrong-answer feedback and clears it when editing", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  const answer = page.getByLabel("Dein Ergebnis");
+  const feedback = page.locator("#feedback");
+  await answer.evaluate((element) => {
+    element.addEventListener("animationstart", (event) => {
+      if ((event as AnimationEvent).animationName === "answer-error-pulse") {
+        const input = element as HTMLInputElement;
+        input.dataset.pulseStarts = String(
+          Number(input.dataset.pulseStarts ?? 0) + 1,
+        );
+      }
+    });
+  });
+
+  await answer.fill("9");
+  await page.getByRole("button", { name: "Prüfen" }).click();
+  await expect(answer).toHaveAttribute("data-pulse-starts", "1");
+  await expect(answer).toHaveAttribute("aria-invalid", "true");
+  await expect(answer).toBeFocused();
+  expect(
+    await answer.evaluate((element) => {
+      const input = element as HTMLInputElement;
+      return [input.selectionStart, input.selectionEnd];
+    }),
+  ).toEqual([0, 1]);
+
+  // Submit the unchanged answer again, including during an active animation.
+  await page.locator("#answer-form").evaluate((element) => {
+    (element as HTMLFormElement).requestSubmit();
+  });
+  await expect(answer).toHaveAttribute("data-pulse-starts", "2");
+  await expect(page.locator("#mistakes")).toHaveText("2");
+  await expect(feedback).toHaveText(
+    "Noch nicht richtig. Versuch es noch einmal.",
+  );
+  await expect(answer).not.toHaveAttribute("data-feedback-pulse");
+
+  await answer.fill("8");
+  await expect(answer).toHaveAttribute("aria-invalid", "false");
+  await expect(feedback).toBeEmpty();
+  await answer.press("Enter");
+  await expect(answer).toHaveAttribute("data-pulse-starts", "3");
+  await expect(answer).toHaveAttribute("aria-invalid", "true");
+
+  await page.getByRole("button", { name: "Neue Kette" }).click();
+  await expect(answer).not.toHaveAttribute("data-feedback-pulse");
+  await expect(answer).toHaveAttribute("aria-invalid", "false");
+  await expect(feedback).toBeEmpty();
+});
+
+for (const reducedMotion of ["no-preference", "reduce"] as const) {
+  test(`uses a color pulse for invalid input and respects ${reducedMotion} motion`, async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion });
+    const answer = page.getByLabel("Dein Ergebnis");
+    const submit = page.getByRole("button", { name: "Prüfen" });
+    // Keep the animation active so its styles can be inspected reliably.
+    await page.addStyleTag({
+      content: "#answer[data-feedback-pulse] { animation-play-state: paused; }",
+    });
+
+    for (const value of ["", "abc"]) {
+      await answer.fill(value);
+      await submit.click();
+      await expect(answer).toHaveCSS("animation-name", "answer-error-pulse");
+      await expect(answer).toHaveCSS("transform", "none");
+      await expect(page.locator("#feedback")).toHaveText(
+        "Bitte gib eine ganze Zahl ein.",
+      );
+      await expect(page.locator("#mistakes")).toHaveText("0");
+    }
+
+    await answer.fill("9");
+    await submit.click();
+    await expect(answer).toHaveCSS(
+      "animation-name",
+      reducedMotion === "reduce"
+        ? "answer-error-pulse"
+        : "answer-error-pulse, answer-error-shake",
+    );
+    if (reducedMotion === "reduce") {
+      await expect(answer).toHaveCSS("transform", "none");
+    }
+
+    await answer.fill("11");
+    await submit.click();
+    await expect(answer).not.toHaveAttribute("data-feedback-pulse");
+    await expect(answer).toHaveAttribute("aria-invalid", "false");
+    await expect(page.locator("#progress-bar")).toHaveAttribute("value", "1");
+  });
+}
+
 for (const width of [320, 390, 430]) {
   test(`shows the full completion message within the unchanged frame at ${width}px`, async ({
     page,
