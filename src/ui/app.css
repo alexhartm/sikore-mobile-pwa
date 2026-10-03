@@ -532,6 +532,21 @@ progress::-moz-progress-bar {
   background: #fff4f2;
 }
 
+#answer[data-feedback-pulse] {
+  animation: answer-error-pulse 280ms ease-out;
+}
+
+@keyframes answer-error-pulse {
+  0%,
+  100% {
+    background: #fff4f2;
+  }
+
+  35% {
+    background: #ffd8d3;
+  }
+}
+
 .primary-button,
 .secondary-button,
 .text-button {
@@ -898,6 +913,29 @@ progress::-moz-progress-bar {
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  #answer[data-feedback-pulse="incorrect"] {
+    animation:
+      answer-error-pulse 280ms ease-out,
+      answer-error-shake 240ms ease-out;
+  }
+
+  @keyframes answer-error-shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    20%,
+    60% {
+      transform: translateX(-3px);
+    }
+
+    40%,
+    80% {
+      transform: translateX(3px);
+    }
+  }
+
   .exercise-card {
     animation: page-in 240ms ease-out;
   }

@@ -107,6 +107,17 @@ function playSuccessAnimation(): void {
   ui.successAnimation.classList.add("is-active");
 }
 
+function clearAnswerPulse(): void {
+  delete ui.answer.dataset.feedbackPulse;
+}
+
+function playAnswerPulse(feedback: "incorrect" | "invalid"): void {
+  clearAnswerPulse();
+  // Restart even when the same answer is submitted during an active pulse.
+  void ui.answer.offsetWidth;
+  ui.answer.dataset.feedbackPulse = feedback;
+}
+
 function render(state: SessionState): void {
   const { snapshot } = state;
   ui.progressLevel.textContent = `Level ${activeLevelId}`;
@@ -206,6 +217,7 @@ function startChain(): void {
   localStorage.setItem(STORAGE_KEY, String(level.id));
   activeLevelId = level.id;
   updateLevelDescription();
+  clearAnswerPulse();
   ui.answer.value = "";
   ui.feedback.textContent = "";
   render(session.start(level));
@@ -296,7 +308,21 @@ ui.levelDialog.addEventListener("close", () => {
   ui.level.setAttribute("aria-expanded", "false");
   ui.level.focus({ preventScroll: true });
 });
-ui.answer.addEventListener("input", updateInlineSize);
+ui.answer.addEventListener("input", () => {
+  clearAnswerPulse();
+  if (
+    ui.feedback.dataset.kind === "incorrect" ||
+    ui.feedback.dataset.kind === "invalid"
+  ) {
+    ui.answer.setAttribute("aria-invalid", "false");
+    ui.feedback.textContent = "";
+    ui.feedback.dataset.kind = "idle";
+  }
+  updateInlineSize();
+});
+ui.answer.addEventListener("animationend", (event) => {
+  if (event.animationName === "answer-error-pulse") clearAnswerPulse();
+});
 ui.newChain.addEventListener("click", startChain);
 ui.retry.addEventListener("click", () => {
   void clearCachedEngine().then(() => {
@@ -307,11 +333,14 @@ ui.retry.addEventListener("click", () => {
 ui.answerForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const state = session.submit(ui.answer.value);
+  clearAnswerPulse();
   render(state);
   if (state.feedback === "correct") {
     ui.answer.value = "";
     updateInlineSize();
     playSuccessAnimation();
+  } else if (state.feedback === "incorrect" || state.feedback === "invalid") {
+    playAnswerPulse(state.feedback);
   }
   if (!state.snapshot.completed) {
     ui.answer.focus({ preventScroll: true });
