@@ -42,6 +42,51 @@ test("changes and persists the selected level", async ({ page }) => {
   await expect(page.locator("#level-title")).toHaveText("Level 5");
 });
 
+for (const width of [320, 390, 430]) {
+  test(`shows the full completion message within the unchanged frame at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 844 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = "20px";
+    });
+    const card = page.locator(".exercise-card");
+    const initial = (await card.boundingBox())!;
+    const answer = page.getByLabel("Dein Ergebnis");
+    const submit = page.getByRole("button", { name: "Prüfen" });
+    for (let value = 11; value <= 22; value++) {
+      await answer.fill(String(value));
+      await submit.click();
+    }
+
+    const feedback = page.locator("#feedback");
+    await expect(feedback).toHaveAttribute("data-kind", "complete");
+    await expect(answer).toBeHidden();
+    await expect(submit).toBeHidden();
+    const completed = (await card.boundingBox())!;
+    expect(completed.width).toBe(initial.width);
+    expect(completed.height).toBe(initial.height);
+    // Chromium rounds text overflow and element height differently by 1px.
+    expect(
+      await feedback.evaluate(
+        (element) => element.scrollHeight - element.clientHeight,
+      ),
+    ).toBeLessThanOrEqual(1);
+    const message = (await feedback.boundingBox())!;
+    expect(message.y).toBeGreaterThanOrEqual(completed.y);
+    expect(message.y + message.height).toBeLessThanOrEqual(
+      completed.y + completed.height,
+    );
+
+    await page.getByRole("button", { name: "Neue Kette" }).click();
+    await expect(answer).toBeVisible();
+    await expect(answer).toBeEnabled();
+    await expect(submit).toBeVisible();
+    expect((await card.boundingBox())!.height).toBe(initial.height);
+  });
+}
+
 test("uses school notation and stable layouts for each operation", async ({
   page,
 }) => {
