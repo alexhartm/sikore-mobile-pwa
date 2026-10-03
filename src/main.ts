@@ -40,6 +40,16 @@ const ui = {
   answer: required<HTMLInputElement>("#answer"),
   submit: required<HTMLButtonElement>("#submit-answer"),
   feedback: required<HTMLElement>("#feedback"),
+  completionStats: required<HTMLElement>("#completion-stats"),
+  completionMistakes: required<HTMLElement>("#completion-mistakes"),
+  completionMistakesHint: required<HTMLElement>("#completion-mistakes-hint"),
+  completionCorrect: required<HTMLElement>("#completion-correct"),
+  completionTotal: required<HTMLElement>("#completion-total"),
+  completionCorrectHint: required<HTMLElement>("#completion-correct-hint"),
+  completionElapsed: required<HTMLElement>("#completion-elapsed"),
+  completionActions: required<HTMLElement>("#completion-actions"),
+  nextLevel: required<HTMLButtonElement>("#next-level"),
+  repeatChain: required<HTMLButtonElement>("#repeat-chain"),
   mistakes: required<HTMLElement>("#mistakes"),
   elapsed: required<HTMLElement>("#elapsed"),
   newChain: required<HTMLButtonElement>("#new-chain"),
@@ -62,6 +72,11 @@ function selectedLevel() {
   return getLevel(selectedLevelId);
 }
 
+function nextLevel() {
+  const index = LEVELS.findIndex((level) => level.id === activeLevelId);
+  return LEVELS[index + 1];
+}
+
 function formatDuration(seconds: number): string {
   const minutes = Math.floor(seconds / 60);
   const remainder = seconds % 60;
@@ -73,6 +88,8 @@ function formatDuration(seconds: number): string {
 function setControlsEnabled(enabled: boolean): void {
   ui.level.disabled = !enabled;
   ui.newChain.disabled = !enabled;
+  ui.nextLevel.disabled = !enabled;
+  ui.repeatChain.disabled = !enabled;
   ui.answer.disabled = !enabled;
   ui.submit.disabled = !enabled;
 }
@@ -125,24 +142,35 @@ function render(state: SessionState): void {
   ui.elapsed.textContent = formatDuration(state.elapsedSeconds);
   ui.progressBar.max = snapshot.total;
   ui.progressBar.value = snapshot.position;
+  ui.completionStats.hidden = !snapshot.completed;
+  ui.completionActions.hidden = !snapshot.completed;
 
   if (snapshot.completed) {
     ui.problemStage.dataset.layout = "stacked";
     delete ui.problemStage.dataset.density;
     ui.progress.textContent = `${snapshot.total} von ${snapshot.total}`;
-    ui.prompt.textContent = `Geschafft. ${snapshot.total} Aufgaben, ${snapshot.mistakes} ${snapshot.mistakes === 1 ? "Fehler" : "Fehler"}.`;
+    ui.prompt.textContent = `Geschafft. ${snapshot.position} von ${snapshot.total} Aufgaben richtig gelöst, ${snapshot.mistakes} Fehler, Dauer ${formatDuration(state.elapsedSeconds)}.`;
     ui.currentValue.textContent = "Fertig";
     ui.operation.textContent = "✓";
     ui.answer.value = "";
     ui.answer.disabled = true;
     ui.submit.disabled = true;
-    ui.feedback.textContent =
-      "Stark gerechnet! Starte eine neue Kette, wenn du weitermachen möchtest.";
+    ui.feedback.textContent = "Stark gerechnet!";
     ui.feedback.dataset.kind = "complete";
+    ui.completionMistakes.textContent = String(snapshot.mistakes);
+    ui.completionMistakesHint.textContent =
+      snapshot.mistakes === 1 ? "falscher Versuch" : "falsche Versuche";
+    ui.completionCorrect.textContent = String(snapshot.position);
+    ui.completionTotal.textContent = `/ ${snapshot.total}`;
+    ui.completionCorrectHint.textContent =
+      snapshot.mistakes > 0 ? "mit Korrektur" : "alle Aufgaben";
+    ui.completionElapsed.textContent = formatDuration(state.elapsedSeconds);
+    ui.nextLevel.hidden = !nextLevel();
     // Let the blur handler restore the settings before focusing the next action.
     ui.answer.blur();
     window.requestAnimationFrame(() => {
-      ui.newChain.focus({ preventScroll: true });
+      if (!ui.completionActions.hidden)
+        ui.repeatChain.focus({ preventScroll: true });
     });
     return;
   }
@@ -324,6 +352,18 @@ ui.answer.addEventListener("animationend", (event) => {
   if (event.animationName === "answer-error-pulse") clearAnswerPulse();
 });
 ui.newChain.addEventListener("click", startChain);
+ui.repeatChain.addEventListener("click", () => {
+  if (ui.completionActions.hidden) return;
+  selectedLevelId = activeLevelId;
+  startChain();
+});
+ui.nextLevel.addEventListener("click", () => {
+  if (ui.completionActions.hidden) return;
+  const level = nextLevel();
+  if (!level) return;
+  selectedLevelId = level.id;
+  startChain();
+});
 ui.retry.addEventListener("click", () => {
   void clearCachedEngine().then(() => {
     engine.reload();

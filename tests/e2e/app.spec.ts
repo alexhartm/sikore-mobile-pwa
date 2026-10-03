@@ -175,7 +175,15 @@ for (const width of [320, 390, 430]) {
       completed.y + completed.height,
     );
 
-    await page.getByRole("button", { name: "Neue Kette" }).click();
+    for (const selector of ["#completion-stats", "#completion-actions"]) {
+      const element = page.locator(selector);
+      await expect(element).toBeVisible();
+      const bounds = (await element.boundingBox())!;
+      expect(bounds.y + bounds.height).toBeLessThanOrEqual(
+        completed.y + completed.height,
+      );
+    }
+    await page.getByRole("button", { name: "Nochmal", exact: true }).click();
     await expect(answer).toBeVisible();
     await expect(answer).toBeEnabled();
     await expect(submit).toBeVisible();
