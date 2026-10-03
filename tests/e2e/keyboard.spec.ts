@@ -132,7 +132,7 @@ for (const size of [
       page.getByRole("button", { name: "Neue Kette" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("button", { name: "Neue Kette" }),
+      page.getByRole("button", { name: "Nochmal", exact: true }),
     ).toBeFocused();
   });
 }

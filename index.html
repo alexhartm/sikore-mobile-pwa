@@ -104,6 +104,55 @@
             Prüfen
           </button>
           <p id="feedback" class="feedback" aria-live="polite"></p>
+          <dl
+            id="completion-stats"
+            class="completion-stats"
+            aria-label="Ergebnis der Rechenkette"
+            hidden
+          >
+            <div class="completion-stat">
+              <dt>Fehler</dt>
+              <dd id="completion-mistakes">0</dd>
+              <dd class="completion-stat-hint" id="completion-mistakes-hint">
+                falsche Versuche
+              </dd>
+            </div>
+            <div class="completion-stat completion-stat-correct">
+              <dt>Richtig gelöst</dt>
+              <dd>
+                <span id="completion-correct">12</span>
+                <span class="completion-stat-unit" id="completion-total"
+                  >/ 12</span
+                >
+              </dd>
+              <dd class="completion-stat-hint" id="completion-correct-hint">
+                alle Aufgaben
+              </dd>
+            </div>
+            <div class="completion-stat completion-stat-duration">
+              <dt>Dauer</dt>
+              <dd id="completion-elapsed">0 s</dd>
+              <dd class="completion-stat-hint">diese Kette</dd>
+            </div>
+          </dl>
+          <div id="completion-actions" class="completion-actions" hidden>
+            <button
+              id="next-level"
+              class="secondary-button completion-next"
+              type="button"
+              disabled
+            >
+              Nächstes Level
+            </button>
+            <button
+              id="repeat-chain"
+              class="secondary-button completion-repeat"
+              type="button"
+              disabled
+            >
+              Nochmal
+            </button>
+          </div>
           <button id="retry-engine" class="text-button" type="button" hidden>
             Erneut versuchen
           </button>
