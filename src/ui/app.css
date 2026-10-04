@@ -74,14 +74,7 @@ a {
     max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom))
     max(1rem, env(safe-area-inset-left));
   display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: 1rem;
-}
-
-.masthead {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  grid-template-rows: 1fr auto;
   gap: 1rem;
 }
 
@@ -89,57 +82,6 @@ a {
   display: grid;
   align-content: start;
   gap: 1rem;
-}
-
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.65rem;
-  color: var(--ink);
-  font-size: 1.25rem;
-  font-weight: 800;
-  text-decoration: none;
-  letter-spacing: -0.025em;
-}
-
-.brand-mark {
-  width: 2.5rem;
-  height: 2.5rem;
-  display: grid;
-  place-items: center;
-  border-radius: 0.7rem 0.7rem 0.7rem 0.15rem;
-  color: white;
-  background: var(--ink);
-  font-family: ui-monospace, monospace;
-  font-size: 1rem;
-}
-
-.connection {
-  display: grid;
-  justify-items: end;
-  gap: 0.2rem;
-  font-size: 0.75rem;
-}
-
-.network-pill {
-  padding: 0.15rem 0.45rem;
-  border: 1px solid currentColor;
-  border-radius: 999px;
-  color: var(--green);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.network-pill[data-state="offline"],
-.runtime-status[data-state="error"] {
-  color: #a52f27;
-}
-
-.runtime-status {
-  max-width: 13rem;
-  color: #596174;
-  text-align: right;
 }
 
 .settings,
@@ -750,7 +692,6 @@ progress::-moz-progress-bar {
   overflow: hidden;
 }
 
-.keyboard-open .masthead,
 .keyboard-open .session-bar,
 .keyboard-open .settings,
 .keyboard-open .site-footer {

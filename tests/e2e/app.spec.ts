@@ -3,7 +3,7 @@ import { chooseLevel, startLevel } from "./helpers";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("./");
-  await expect(page.getByText("Bereit", { exact: true })).toBeVisible();
+  await expect(page.locator("#answer")).toBeEnabled();
 });
 
 test("solves a chain and reports mistakes", async ({ page }) => {
@@ -239,5 +239,5 @@ test("shows a recoverable error when the engine is unavailable", async ({
 
   await page.unroute("**/fake-sikore.js");
   await page.getByRole("button", { name: "Erneut versuchen" }).click();
-  await expect(page.getByText("Bereit", { exact: true })).toBeVisible();
+  await expect(page.locator("#answer")).toBeEnabled();
 });

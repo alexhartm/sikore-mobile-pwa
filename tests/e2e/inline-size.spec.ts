@@ -6,7 +6,7 @@ for (const width of [320, 390, 430]) {
   }, testInfo) => {
     await page.setViewportSize({ width, height: 844 });
     await page.goto("./");
-    await expect(page.getByText("Bereit", { exact: true })).toBeVisible();
+    await expect(page.locator("#answer")).toBeEnabled();
     const sizes: number[] = [];
     for (const step of [
       { value: 4, operand: 4, operation: 2, result: 16 },

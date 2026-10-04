@@ -18,23 +18,6 @@
   </head>
   <body>
     <main class="app-shell">
-      <header class="masthead">
-        <a
-          class="brand"
-          href="#info"
-          aria-label="Informationen über SIKORE Mobile"
-        >
-          <span class="brand-mark" aria-hidden="true">S/</span>
-          <span>SIKORE Mobile</span>
-        </a>
-        <div class="connection" aria-live="polite">
-          <span id="network-status" class="network-pill">online</span>
-          <span id="runtime-status" class="runtime-status" role="status"
-            >Wird geladen …</span
-          >
-        </div>
-      </header>
-
       <div id="trainer-view" class="trainer-view">
         <section class="exercise-card" aria-labelledby="exercise-prompt">
           <div id="success-animation" class="success-burst" aria-hidden="true">
@@ -153,6 +136,7 @@
               Nochmal
             </button>
           </div>
+          <p id="runtime-status" role="status" hidden></p>
           <button id="retry-engine" class="text-button" type="button" hidden>
             Erneut versuchen
           </button>
@@ -242,6 +226,9 @@
       </section>
 
       <footer class="site-footer">
+        <a href="#info" aria-label="Informationen über SIKORE Mobile"
+          >Über diese App</a
+        >
         <p>
           Aufgaben und Prüfung durch die
           <a href="https://sikore.schiffner-tischer.de/" rel="external"

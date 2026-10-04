@@ -5,13 +5,13 @@ test("reopens the installed shell and engine while offline", async ({
   page,
 }) => {
   await page.goto("./");
-  await expect(page.getByText("Bereit", { exact: true })).toBeVisible();
+  await expect(page.locator("#answer")).toBeEnabled();
   await page.evaluate(() => navigator.serviceWorker.ready);
   await page.reload();
-  await expect(page.getByText("Bereit", { exact: true })).toBeVisible();
+  await expect(page.locator("#answer")).toBeEnabled();
 
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByText("Bereit", { exact: true })).toBeVisible();
-  await expect(page.getByText("offline", { exact: true })).toBeVisible();
+  await expect(page.locator("#answer")).toBeEnabled();
+  expect(await page.evaluate(() => navigator.onLine)).toBe(false);
 });

@@ -46,13 +46,12 @@ for (const size of [
       });
     });
     await page.goto("./");
-    await expect(page.getByText("Bereit", { exact: true })).toBeVisible();
+    await expect(page.locator("#answer")).toBeEnabled();
     const answer = page.getByLabel("Dein Ergebnis");
     const submit = page.getByRole("button", { name: "Prüfen" });
     await answer.focus();
     await resizeVisibleArea(page, size.visible, 24);
     await expect(page.locator("html")).toHaveClass(/keyboard-open/);
-    await expect(page.locator(".masthead")).toBeHidden();
 
     for (const level of ["5", "13", "15"]) {
       // Settings are intentionally hidden while typing; change the selection
@@ -119,7 +118,6 @@ for (const size of [
     // Dismissal can leave the input focused on iOS.
     await resizeVisibleArea(page, size.height);
     await expect(page.locator("html")).not.toHaveClass(/keyboard-open/);
-    await expect(page.locator(".masthead")).toBeVisible();
     await resizeVisibleArea(page, size.visible);
     await expect(page.locator("html")).toHaveClass(/keyboard-open/);
     for (let value = 14; value <= 22; value++) {

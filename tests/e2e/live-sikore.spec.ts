@@ -9,7 +9,7 @@ test("the current upstream runtime satisfies the adapter contract", async ({
     "Set SIKORE_LIVE_TEST=1 to contact the upstream service.",
   );
   await page.goto("./");
-  await expect(page.getByText("Bereit", { exact: true })).toBeVisible({
+  await expect(page.locator("#answer")).toBeEnabled({
     timeout: 15_000,
   });
   await expect(page.getByLabel("Dein Ergebnis")).toBeEnabled();
