@@ -14,7 +14,7 @@ for (const size of [
   }) => {
     await page.setViewportSize(size);
     await page.goto("./");
-    await expect(page.getByText("Bereit", { exact: true })).toBeVisible();
+    await expect(page.locator("#answer")).toBeEnabled();
     await page.evaluate(() => {
       const runtime = window as unknown as {
         erzeuge_blatt: () => void;

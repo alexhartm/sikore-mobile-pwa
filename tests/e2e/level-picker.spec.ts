@@ -5,7 +5,7 @@ test("selects the next level without resetting an ongoing chain", async ({
   page,
 }) => {
   await page.goto("./");
-  await expect(page.getByText("Bereit", { exact: true })).toBeVisible();
+  await expect(page.locator("#answer")).toBeEnabled();
   await page.getByLabel("Dein Ergebnis").fill("11");
   await page.getByRole("button", { name: "Prüfen" }).click();
   await expect(page.locator("#progress-text")).toHaveText("2 von 12");
@@ -25,7 +25,7 @@ test("closes with Escape, the close button and the backdrop", async ({
   page,
 }) => {
   await page.goto("./");
-  await expect(page.getByText("Bereit", { exact: true })).toBeVisible();
+  await expect(page.locator("#answer")).toBeEnabled();
   const trigger = page.getByRole("button", {
     name: "Schwierigkeitsstufe",
     exact: true,
@@ -53,7 +53,7 @@ for (const width of [320, 390, 430]) {
       localStorage.setItem("sikore-mobile-level", "6"),
     );
     await page.goto("./");
-    await expect(page.getByText("Bereit", { exact: true })).toBeVisible();
+    await expect(page.locator("#answer")).toBeEnabled();
     await expect(page.locator("#level-description")).toHaveText(
       "bis 100, mal und geteilt bis 10",
     );

@@ -18,7 +18,6 @@ function required<T extends Element>(selector: string): T {
 
 const ui = {
   status: required<HTMLElement>("#runtime-status"),
-  network: required<HTMLElement>("#network-status"),
   trainerView: required<HTMLElement>("#trainer-view"),
   infoView: required<HTMLElement>("#info-view"),
   level: required<HTMLButtonElement>("#level-select"),
@@ -92,12 +91,6 @@ function setControlsEnabled(enabled: boolean): void {
   ui.repeatChain.disabled = !enabled;
   ui.answer.disabled = !enabled;
   ui.submit.disabled = !enabled;
-}
-
-function updateNetworkStatus(): void {
-  const online = navigator.onLine;
-  ui.network.textContent = online ? "online" : "offline";
-  ui.network.dataset.state = online ? "online" : "offline";
 }
 
 function updateLevelDescription(): void {
@@ -255,6 +248,7 @@ function startChain(): void {
 async function bootEngine(): Promise<void> {
   setControlsEnabled(false);
   ui.retry.hidden = true;
+  ui.status.hidden = true;
   ui.status.textContent = "Rechenengine wird geladen …";
   ui.status.dataset.state = "loading";
 
@@ -273,6 +267,7 @@ async function bootEngine(): Promise<void> {
         ? error.message
         : "Die Rechenengine ist nicht verfügbar.";
     ui.status.dataset.state = "error";
+    ui.status.hidden = false;
     ui.progress.textContent = "Nicht gestartet";
     ui.progressBar.value = 0;
     ui.prompt.textContent = "Keine Aufgabe verfügbar.";
@@ -309,7 +304,6 @@ for (const level of LEVELS) {
   input.addEventListener("click", () => ui.levelDialog.close());
 }
 updateLevelDescription();
-updateNetworkStatus();
 
 ui.level.addEventListener("click", () => {
   ui.levelDialog.showModal();
@@ -387,8 +381,6 @@ ui.answerForm.addEventListener("submit", (event) => {
     if (state.feedback !== "correct") ui.answer.select();
   }
 });
-window.addEventListener("online", updateNetworkStatus);
-window.addEventListener("offline", updateNetworkStatus);
 window.addEventListener("hashchange", updateView);
 ui.successAnimation.addEventListener("animationend", (event) => {
   if (event.target === ui.successAnimation) {

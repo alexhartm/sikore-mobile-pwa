@@ -15,7 +15,7 @@ async function finishChain(page: Page): Promise<void> {
 test.beforeEach(async ({ page }) => {
   await page.clock.setFixedTime(new Date("2026-10-03T10:00:00Z"));
   await page.goto("./");
-  await expect(page.getByText("Bereit", { exact: true })).toBeVisible();
+  await expect(page.locator("#answer")).toBeEnabled();
 });
 
 test("shows mistakes, solved tasks and final duration in the requested order", async ({
