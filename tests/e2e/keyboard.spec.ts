@@ -112,7 +112,7 @@ for (const size of [
       await expect(answer).toHaveValue("");
       await expect(page.locator("html")).toHaveClass(/keyboard-open/);
       expect(await submit.boundingBox()).toEqual(originalButton);
-      await expect(page.locator("#success-animation")).toBeHidden();
+      await expect(page.locator("#success-animation")).toBeVisible();
     }
 
     // Dismissal can leave the input focused on iOS.

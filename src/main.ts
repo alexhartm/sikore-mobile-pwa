@@ -112,7 +112,6 @@ function updateView(): void {
 
 function playSuccessAnimation(): void {
   ui.successAnimation.classList.remove("is-active");
-  if (document.documentElement.classList.contains("keyboard-open")) return;
   void ui.successAnimation.offsetWidth;
   ui.successAnimation.classList.add("is-active");
 }

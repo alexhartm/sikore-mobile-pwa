@@ -829,11 +829,6 @@ progress::-moz-progress-bar {
   }
 }
 
-/* The central burst would cover the next calculation during fast entry. */
-.keyboard-open .success-burst.is-active {
-  display: none;
-}
-
 /* Reuse the finished controls' space without changing the card's dimensions. */
 .exercise-card:has(.feedback[data-kind="complete"]) {
   grid-template-rows: auto minmax(0, 1fr) auto auto auto;
