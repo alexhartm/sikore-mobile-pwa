@@ -22,6 +22,9 @@ certificates/
 *.pem
 *.key
 
+# Local private tooling and configuration
+.*-private/
+
 # Editors and operating systems
 .DS_Store
 .idea/
