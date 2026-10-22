@@ -41,11 +41,14 @@ A strict Content Security Policy is complicated by the current upstream runtime 
 
 ## Managed Builds
 
-The corresponding generic settings are:
+The corresponding generic build settings are:
 
 ```text
 Build command: mise run build (or npm ci && npm run build)
+Node version: 22.23.4 (when using the npm command without mise)
 Output directory: dist
 ```
 
 No functions, database, environment secrets, or server-side routes are required.
+
+For a managed build, explicitly select the patched Node version rather than relying on the provider's default. For a local upload, build and run deployment tooling under the repository's mise pin. Changing this documentation does not change an existing host's settings. The security requirements for the build toolchain apply equally to managed and local builds; serving `dist/` does not execute Node.

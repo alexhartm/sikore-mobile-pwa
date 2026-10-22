@@ -24,6 +24,7 @@ certificates/
 
 # Local private tooling and configuration
 .*-private/
+/tasks/
 
 # Editors and operating systems
 .DS_Store
