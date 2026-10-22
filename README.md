@@ -22,7 +22,7 @@ Advanced custom SIKORE settings, timers, and deployment configuration are intent
 ## Requirements
 
 - [mise](https://mise.jdx.dev/) for the pinned Node and pre-commit toolchain.
-- Node 22.23.4 is pinned for development. Other supported release lines require at least 24.22.1 or 26.12.1; npm rejects older runtimes during installation. See [Security and licensing](docs/security-and-licensing.md#node-toolchain).
+- Node 24.22.1 is pinned for development. Other supported release lines require at least 22.23.4 or 26.12.1; npm rejects older runtimes during installation. See [Security and licensing](docs/security-and-licensing.md#node-toolchain).
 - Internet access on the first application load so the browser can obtain the SIKORE runtime from its original server.
 
 ## Quick Start

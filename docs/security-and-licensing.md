@@ -6,7 +6,7 @@ This document records constraints rather than offering legal advice.
 
 Node is a build, test, and deployment-tool dependency, not a production server for this static application. The [October 21, 2026 security release](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) fixes issues including Brotli memory corruption and DNS/TLS validation. Local or CI tools processing remote data still need the fixes even when production only serves static files.
 
-- `mise.toml` pins Node 22.23.4. Run `mise install` and verify `mise exec -- node --version` before installing dependencies or running tooling.
+- `mise.toml` pins Node 24.22.1. Run `mise install` and verify `mise exec -- node --version` before installing dependencies or running tooling.
 - The npm manifests accept patched releases in the 22, 24, and 26 lines: `^22.23.4 || ^24.22.1 || ^26.12.1`. `.npmrc` enables `engine-strict`, so installation fails on unsupported runtimes. This is an installation check, not a runtime sandbox or a check on every direct `node` invocation.
 - Apply the patched runtime requirement to every Node-based tool, including build and release automation. Check the actual executable and published artifacts: npm audits and overrides do not inspect or replace dependencies embedded inside bundled tools.
 - Updating Node does not update standalone npm dependencies or independently configured build interpreters. Review those separately.

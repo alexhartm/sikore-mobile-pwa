@@ -45,7 +45,7 @@ The corresponding generic build settings are:
 
 ```text
 Build command: mise run build (or npm ci && npm run build)
-Node version: 22.23.4 (when using the npm command without mise)
+Node version: 24.22.1 (when using the npm command without mise)
 Output directory: dist
 ```
 

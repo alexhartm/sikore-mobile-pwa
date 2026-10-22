@@ -1,5 +1,5 @@
 [tools]
-node = "22.23.4"
+node = "24.22.1"
 pre-commit = "latest"
 
 [tasks.install]
