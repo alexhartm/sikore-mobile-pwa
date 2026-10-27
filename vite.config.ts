@@ -38,6 +38,8 @@ plugins.push(
 export default defineConfig({
   base: "./",
   plugins,
+  // Preserve Vite 7's browser baseline when upgrading the build toolchain.
+  build: { target: ["chrome107", "edge107", "firefox104", "safari16"] },
   server: { host: true },
   preview: { host: true },
 });
